@@ -8,7 +8,7 @@ import X from "@/components/svgs/X";
 
 export default function Hero() {
   return (
-    <section id="hero" className="pt-8 sm:pt-10">
+    <section id="hero" >
       <div className="flex items-center gap-5">
         <div className="shrink-0">
           <Image

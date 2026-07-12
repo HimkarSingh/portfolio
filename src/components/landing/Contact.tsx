@@ -2,7 +2,7 @@ import { siteConfig } from "@/config/site";
 
 export default function Contact() {
   return (
-    <section id="contact" className="py-16 sm:py-20">
+    <section id="contact">
       <p className="text-sm font-medium text-muted-foreground">Get in touch</p>
       <div className="mt-3 flex flex-col justify-between gap-6 border-t border-zinc-800 pt-6 sm:flex-row sm:items-end">
         <div>

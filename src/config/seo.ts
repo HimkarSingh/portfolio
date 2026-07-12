@@ -8,7 +8,7 @@ export const seo = {
 
   projects: {
     title: "Projects",
-    description: "Projects built by Himkar Singh.",
+    description: "Projects built by Himkar.",
   },
 
   blog: {

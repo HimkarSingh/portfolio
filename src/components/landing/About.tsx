@@ -2,7 +2,7 @@ import { about } from "@/config/about";
 
 export default function About() {
   return (
-    <section id="about" className="py-16 sm:py-20">
+    <section id="about">
       <p className="text-sm font-medium text-muted-foreground">{about.eyebrow}</p>
       <div className="mt-3 grid gap-6 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] md:gap-10">
         <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">

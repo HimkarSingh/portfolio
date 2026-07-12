@@ -3,15 +3,7 @@ export const socialLinks = {
 
   linkedin: "https://linkedin.com/in/himkarsingh99",
 
-  twitter: "https://twitter.com/himkar",
+  twitter: "https://twitter.com/himkarr",
 
   email: "mailto:himkarsingh@proton.me",
-
-  discord: "himkarsingh",
-
-  tryhackme: "himkar",
-
-  hackerrank: "himkar",
-
-  leetcode: "himkar",
 } as const;

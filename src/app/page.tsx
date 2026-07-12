@@ -8,13 +8,15 @@ import Contact from "@/components/landing/Contact";
 
 export default function HomePage() {
   return (
-    <Container className="py-16">
-      <Hero />
-      <Projects />
-      <Experience />
-      <About />
-      <Certifications />
-      <Contact />
+    <Container className="pt-6 pb-16 sm:pt-8">
+      <div className="space-y-12 sm:space-y-14">
+        <Hero />
+        <Projects />
+        <Experience />
+        <About />
+        <Certifications />
+        <Contact />
+      </div>
     </Container>
   );
 }

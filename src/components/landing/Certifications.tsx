@@ -2,7 +2,7 @@ import { certificates } from "@/config/certificates";
 
 export default function Certifications() {
   return (
-    <section id="certifications" className="py-20 sm:py-28">
+    <section id="certifications">
       <p className="text-sm font-medium text-muted-foreground">Credentials</p>
       <h2 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">Certifications</h2>
       <div className="mt-10 grid gap-4 md:grid-cols-2">

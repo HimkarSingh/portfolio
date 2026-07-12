@@ -3,7 +3,7 @@
 import { useUmami } from '@/hooks/use-umami';
 import { cn } from '@/lib/utils';
 import { useTheme } from 'next-themes';
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 
 import Moon from '../svgs/Moon';
 import Sun from '../svgs/Sun';
@@ -42,42 +42,82 @@ export const useThemeToggle = ({
     styleElement.textContent = css;
   }, []);
 
-  const toggleTheme = useCallback(() => {
-    const from = isDark ? 'dark' : 'light';
-    const to = isDark ? 'light' : 'dark';
-    trackEvent({
-      name: 'theme_toggle',
-      data: { from, to, location: 'navbar' },
-    });
+const lastToggleAtRef = useRef(0);
+const RAPID_CLICK_MS = 350;
 
-    const animation = createAnimation(variant, start, blur, gifUrl);
+const toggleTheme = useCallback(() => {
+  const from = isDark ? "dark" : "light";
+  const to = isDark ? "light" : "dark";
+  trackEvent({
+    name: "theme_toggle",
+    data: {from, to, location: "navbar"},
+  });
 
-    updateStyles(animation.css);
+  // Toggle from the resolved theme (via isDark), not `theme`, so the switch
+  // is correct even when `theme === 'system'` and matches the tracked from/to.
+  const switchTheme = () => {
+    setTheme(isDark ? "light" : "dark");
+  };
 
-    if (typeof window === 'undefined') return;
+  const now = Date.now();
+  const isRapidClick = now - lastToggleAtRef.current < RAPID_CLICK_MS;
+  lastToggleAtRef.current = now;
 
-    // Toggle from the resolved theme (via isDark), not `theme`, so the switch
-    // is correct even when `theme === 'system'` and matches the tracked from/to.
-    const switchTheme = () => {
-      setTheme(isDark ? 'light' : 'dark');
-    };
+  // Clicking quickly (spam-clicking the toggle) skips the animation and
+  // switches instantly — a slow, deliberate click still gets the full
+  // view-transition reveal.
+  if (
+    isRapidClick ||
+    typeof window === "undefined" ||
+    !document.startViewTransition
+  ) {
+    switchTheme();
+    return;
+  }
 
-    if (!document.startViewTransition) {
-      switchTheme();
-      return;
-    }
+  const animation = createAnimation(variant, start, blur, gifUrl);
+  updateStyles(animation.css);
 
-    document.startViewTransition(switchTheme);
-  }, [
-    setTheme,
-    variant,
-    start,
-    blur,
-    gifUrl,
-    updateStyles,
-    isDark,
-    trackEvent,
-  ]);
+  document.startViewTransition(switchTheme);
+}, [setTheme, variant, start, blur, gifUrl, updateStyles, isDark, trackEvent]);
+
+
+  // const toggleTheme = useCallback(() => {
+  //   const from = isDark ? 'dark' : 'light';
+  //   const to = isDark ? 'light' : 'dark';
+  //   trackEvent({
+  //     name: 'theme_toggle',
+  //     data: { from, to, location: 'navbar' },
+  //   });
+
+  //   const animation = createAnimation(variant, start, blur, gifUrl);
+
+  //   updateStyles(animation.css);
+
+  //   if (typeof window === 'undefined') return;
+
+  //   // Toggle from the resolved theme (via isDark), not `theme`, so the switch
+  //   // is correct even when `theme === 'system'` and matches the tracked from/to.
+  //   const switchTheme = () => {
+  //     setTheme(isDark ? 'light' : 'dark');
+  //   };
+
+  //   if (!document.startViewTransition) {
+  //     switchTheme();
+  //     return;
+  //   }
+
+  //   document.startViewTransition(switchTheme);
+  // }, [
+  //   setTheme,
+  //   variant,
+  //   start,
+  //   blur,
+  //   gifUrl,
+  //   updateStyles,
+  //   isDark,
+  //   trackEvent,
+  // ]);
 
   const setCrazyLightTheme = useCallback(() => {
     const animation = createAnimation(variant, start, blur, gifUrl);

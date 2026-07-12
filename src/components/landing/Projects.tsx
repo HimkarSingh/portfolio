@@ -2,7 +2,7 @@ import { projects } from "@/config/projects";
 
 export default function Projects() {
   return (
-    <section id="projects" className="py-20 sm:py-28">
+    <section id="projects">
       <p className="text-sm font-medium text-muted-foreground">Selected work</p>
       <h2 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">Projects</h2>
       <div className="mt-10 grid gap-4 md:grid-cols-3">

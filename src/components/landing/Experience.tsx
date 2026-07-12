@@ -2,7 +2,7 @@ import { experiences } from "@/config/experience";
 
 export default function Experience() {
   return (
-    <section id="experience" className="py-16 sm:py-20">
+    <section id="experience">
       <div>
         <h2 className="text-2xl font-semibold tracking-tight">Experience</h2>
         <div className="mt-7 space-y-7">

@@ -5,8 +5,8 @@ export const siteConfig = {
   username: "himkar",
 
   // Professional
-  title: "Application Security Engineer",
-  subtitle: "AI Builder & Full Stack Developer",
+  title: "AppSec Eng.",
+  subtitle: "AI Software Engineer",
 
   description:
     "Building secure applications, AI-powered security tools, and modern web experiences.",
