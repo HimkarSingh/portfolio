@@ -5,9 +5,9 @@ export interface NavItem {
 
 export const navbarConfig = {
   navItems: [
-    {label: "Home", href: "/"},
-    {label: "Projects", href: "/#projects"},
-    {label: "Work", href: "/experience"},
-    {label: "Resume", href: "/resume"},
-  ] as NavItem[],
+  { label: 'Home', href: '/' },
+  { label: 'Projects', href: '/projects' },
+  { label: 'Work', href: '/work' },
+  { label: 'Resume', href: '/resume' },
+] as NavItem[],
 };

@@ -1,5 +1,6 @@
 "use client";
 
+import {useClickSound} from "@/hooks/use-click-sound";
 import {useHapticFeedback} from "@/hooks/use-haptic-feedback";
 import {useUmami} from "@/hooks/use-umami";
 import {ArrowUp} from "lucide-react";
@@ -10,8 +11,10 @@ import {Button} from "../ui/button";
 export default function BackToTop() {
   const {triggerHaptic, isMobile} = useHapticFeedback();
   const {trackEvent} = useUmami();
+  const playClick = useClickSound();
 
   const handleClick = () => {
+    playClick();
     window.scrollTo({top: 0, behavior: "smooth"});
 
     trackEvent({

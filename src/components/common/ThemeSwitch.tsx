@@ -1,5 +1,6 @@
 'use client';
 
+import {useClickSound} from "@/hooks/use-click-sound";
 import { useUmami } from '@/hooks/use-umami';
 import { cn } from '@/lib/utils';
 import { useTheme } from 'next-themes';
@@ -10,31 +11,31 @@ import Sun from '../svgs/Sun';
 import { Button } from '../ui/button';
 
 export const useThemeToggle = ({
-  variant = 'circle',
-  start = 'center',
+  variant = "circle",
+  start = "center",
   blur = false,
-  gifUrl = '',
+  gifUrl = "",
 }: {
   variant?: AnimationVariant;
   start?: AnimationStart;
   blur?: boolean;
   gifUrl?: string;
 } = {}) => {
-  const { setTheme, resolvedTheme } = useTheme();
+  const {setTheme, resolvedTheme} = useTheme();
 
-  const { trackEvent } = useUmami();
+  const {trackEvent} = useUmami();
 
-  const isDark = resolvedTheme === 'dark';
+  const isDark = resolvedTheme === "dark";
 
-  const styleId = 'theme-transition-styles';
+  const styleId = "theme-transition-styles";
 
   const updateStyles = useCallback((css: string) => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     let styleElement = document.getElementById(styleId) as HTMLStyleElement;
 
     if (!styleElement) {
-      styleElement = document.createElement('style');
+      styleElement = document.createElement("style");
       styleElement.id = styleId;
       document.head.appendChild(styleElement);
     }
@@ -42,92 +43,108 @@ export const useThemeToggle = ({
     styleElement.textContent = css;
   }, []);
 
-const lastToggleAtRef = useRef(0);
-const RAPID_CLICK_MS = 350;
+  const lastToggleAtRef = useRef(0);
+  const RAPID_CLICK_MS = 350;
 
-const toggleTheme = useCallback(() => {
-  const from = isDark ? "dark" : "light";
-  const to = isDark ? "light" : "dark";
-  trackEvent({
-    name: "theme_toggle",
-    data: {from, to, location: "navbar"},
-  });
+  // Tracks the currently-playing view transition (if any), so a second click
+  // that lands mid-animation can be detected and handled explicitly, instead
+  // of guessing from click timing.
+  const activeTransitionRef = useRef<ViewTransition | null>(null);
 
-  // Toggle from the resolved theme (via isDark), not `theme`, so the switch
-  // is correct even when `theme === 'system'` and matches the tracked from/to.
-  const switchTheme = () => {
-    setTheme(isDark ? "light" : "dark");
-  };
+  const toggleTheme = useCallback(() => {
+    const from = isDark ? "dark" : "light";
+    const to = isDark ? "light" : "dark";
+    trackEvent({
+      name: "theme_toggle",
+      data: {from, to, location: "navbar"},
+    });
 
-  const now = Date.now();
-  const isRapidClick = now - lastToggleAtRef.current < RAPID_CLICK_MS;
-  lastToggleAtRef.current = now;
+    const switchTheme = () => {
+      setTheme(isDark ? "light" : "dark");
+    };
 
-  // Clicking quickly (spam-clicking the toggle) skips the animation and
-  // switches instantly — a slow, deliberate click still gets the full
-  // view-transition reveal.
-  if (
-    isRapidClick ||
-    typeof window === "undefined" ||
-    !document.startViewTransition
-  ) {
-    switchTheme();
-    return;
-  }
+    // A previous click's animation is still playing — this is the "rapid /
+    // multiple clicks" case. Skip it (jumps it straight to its end state)
+    // and switch the theme immediately, with no new animation.
+    if (activeTransitionRef.current) {
+      activeTransitionRef.current.skipTransition();
+      activeTransitionRef.current = null;
+      switchTheme();
+      return;
+    }
 
-  const animation = createAnimation(variant, start, blur, gifUrl);
-  updateStyles(animation.css);
+    if (typeof window === "undefined" || !document.startViewTransition) {
+      switchTheme();
+      return;
+    }
 
-  document.startViewTransition(switchTheme);
-}, [setTheme, variant, start, blur, gifUrl, updateStyles, isDark, trackEvent]);
+    const animation = createAnimation(variant, start, blur, gifUrl);
+    updateStyles(animation.css);
 
+    const transition = document.startViewTransition(switchTheme);
+    activeTransitionRef.current = transition;
+
+    transition.finished.finally(() => {
+      if (activeTransitionRef.current === transition) {
+        activeTransitionRef.current = null;
+      }
+    });
+  }, [
+    setTheme,
+    variant,
+    start,
+    blur,
+    gifUrl,
+    updateStyles,
+    isDark,
+    trackEvent,
+  ]);
 
   // const toggleTheme = useCallback(() => {
-  //   const from = isDark ? 'dark' : 'light';
-  //   const to = isDark ? 'light' : 'dark';
+  //   const from = isDark ? "dark" : "light";
+  //   const to = isDark ? "light" : "dark";
   //   trackEvent({
-  //     name: 'theme_toggle',
-  //     data: { from, to, location: 'navbar' },
+  //     name: "theme_toggle",
+  //     data: {from, to, location: "navbar"},
   //   });
-
-  //   const animation = createAnimation(variant, start, blur, gifUrl);
-
-  //   updateStyles(animation.css);
-
-  //   if (typeof window === 'undefined') return;
 
   //   // Toggle from the resolved theme (via isDark), not `theme`, so the switch
   //   // is correct even when `theme === 'system'` and matches the tracked from/to.
   //   const switchTheme = () => {
-  //     setTheme(isDark ? 'light' : 'dark');
+  //     setTheme(isDark ? "light" : "dark");
   //   };
 
-  //   if (!document.startViewTransition) {
+  //   const now = Date.now();
+  //   const isRapidClick = now - lastToggleAtRef.current < RAPID_CLICK_MS;
+  //   lastToggleAtRef.current = now;
+
+  //   // Clicking quickly (spam-clicking the toggle) skips the animation and
+  //   // switches instantly — a slow, deliberate click still gets the full
+  //   // view-transition reveal.
+  //   if (
+  //     isRapidClick ||
+  //     typeof window === "undefined" ||
+  //     !document.startViewTransition
+  //   ) {
   //     switchTheme();
   //     return;
   //   }
 
+  //   const animation = createAnimation(variant, start, blur, gifUrl);
+  //   updateStyles(animation.css);
+
   //   document.startViewTransition(switchTheme);
-  // }, [
-  //   setTheme,
-  //   variant,
-  //   start,
-  //   blur,
-  //   gifUrl,
-  //   updateStyles,
-  //   isDark,
-  //   trackEvent,
-  // ]);
+  // }, [setTheme, variant, start, blur, gifUrl, updateStyles, isDark, trackEvent]);
 
   const setCrazyLightTheme = useCallback(() => {
     const animation = createAnimation(variant, start, blur, gifUrl);
 
     updateStyles(animation.css);
 
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     const switchTheme = () => {
-      setTheme('light');
+      setTheme("light");
     };
 
     if (!document.startViewTransition) {
@@ -143,10 +160,10 @@ const toggleTheme = useCallback(() => {
 
     updateStyles(animation.css);
 
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     const switchTheme = () => {
-      setTheme('dark');
+      setTheme("dark");
     };
 
     if (!document.startViewTransition) {
@@ -163,7 +180,7 @@ const toggleTheme = useCallback(() => {
     setCrazyLightTheme,
     setCrazyDarkTheme,
   };
-};
+};;
 
 // ///////////////////////////////////////////////////////////////////////////
 
@@ -186,6 +203,7 @@ export const ThemeToggleButton = ({
     blur,
     gifUrl,
   });
+  const playClick = useClickSound();
 
   return (
     <Button
@@ -196,7 +214,10 @@ export const ThemeToggleButton = ({
         'size-10 cursor-pointer p-0 transition-all duration-300 active:scale-95',
         className,
       )}
-      onClick={toggleTheme}
+      onClick={() => {
+        playClick();
+        toggleTheme();
+      }}
       aria-label="Toggle theme"
     >
       <span className="sr-only">Toggle theme</span>
