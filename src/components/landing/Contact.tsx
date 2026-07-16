@@ -6,7 +6,7 @@ export default function Contact() {
       <p className="text-sm font-medium text-muted-foreground">Get in touch</p>
       <div className="mt-3 flex flex-col justify-between gap-6 border-t border-zinc-800 pt-6 sm:flex-row sm:items-end">
         <div>
-          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+          <h2 className="text-2xl font-semibold tracking-tight sm:text-2xl">
             Let&apos;s build something thoughtful.
           </h2>
           <p className="mt-3 max-w-xl leading-7 text-muted-foreground">
