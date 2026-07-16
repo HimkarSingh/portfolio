@@ -146,7 +146,9 @@
 
 /* Page fade-in animation with blur — replays on every page visit/navigation
    since it's applied to Container, which each page mounts fresh. */
-@keyframes fadeInBlur {
+
+
+   /* @keyframes fadeInBlur {
   0% {
     opacity: 0.2;
     filter: blur(5px);
@@ -162,4 +164,4 @@
   animation-delay: 0.15s;
   opacity: 0.4;
   filter: blur(3px);
-}
+} */
