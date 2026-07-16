@@ -12,15 +12,15 @@ export const metadata: Metadata = {
 
 export default function WorkPage() {
   return (
-    <Container className="py-16">
-      <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+    <Container className="pt-8 pb-10">
+      <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
         Work Experience
       </h1>
-      <p className="mt-3 max-w-xl text-muted-foreground">
+      <p className="mt-2 max-w-xl text-sm text-muted-foreground">
         Roles, research, and projects I&apos;ve worked on.
       </p>
 
-      <div className="mt-8 space-y-6">
+      <div className="mt-6 space-y-5">
         {experiences.map((experience) => (
           <ExperienceItem key={experience.role} experience={experience} />
         ))}
