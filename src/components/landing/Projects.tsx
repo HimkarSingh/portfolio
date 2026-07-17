@@ -10,7 +10,6 @@ export default function Projects() {
 
   return (
     <section id="projects">
-      <p className="text-sm font-medium text-muted-foreground">Selected work</p>
       <h2 className="mt-2 text-2xl font-semibold tracking-tight">
         Projects
       </h2>
