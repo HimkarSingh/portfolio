@@ -9,6 +9,7 @@ import React, { useCallback, useRef } from 'react';
 import Moon from '../svgs/Moon';
 import Sun from '../svgs/Sun';
 import { Button } from '../ui/button';
+import {useHotkeys} from "react-hotkeys-hook";
 
 export const useThemeToggle = ({
   variant = "circle",
@@ -202,19 +203,22 @@ export const ThemeToggleButton = ({
   });
   const playClick = useClickSound();
 
+  const handleToggle = useCallback(() => {
+    playClick();
+    toggleTheme();
+  }, [playClick, toggleTheme]);
+  useHotkeys("d", handleToggle);
+
   return (
     <Button
       type="button"
       variant="ghost"
       size="icon"
       className={cn(
-        'size-10 cursor-pointer p-0 transition-all duration-300 active:scale-95',
+        "size-10 cursor-pointer p-0 transition-all duration-300 active:scale-95",
         className,
       )}
-      onClick={() => {
-        playClick();
-        toggleTheme();
-      }}
+      onClick={handleToggle}
       aria-label="Toggle theme"
     >
       <span className="sr-only">Toggle theme</span>

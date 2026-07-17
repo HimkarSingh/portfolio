@@ -3,7 +3,7 @@ import { certificates } from "@/config/certificates";
 export default function Certifications() {
   return (
     <section id="certifications">
-      <h2 className="mt-2 text-3xl font-semibold tracking-tight sm:text-2xl">Certifications</h2>
+      <h2 className="mt-2 text-2xl font-semibold tracking-tight">Certifications</h2>
       <div className="mt-4 grid gap-4 md:grid-cols-2">
         {certificates.map((certificate) => (
           <article key={certificate.title} className="rounded-xl border p-5">
