@@ -3,7 +3,7 @@ import Link from "next/link";
 import { projects } from "@/config/projects";
 import ProjectCard from "@/components/projects/ProjectCard";
 
-const PREVIEW_COUNT = 3;
+const PREVIEW_COUNT = 2;
 
 export default function Projects() {
   const preview = projects.slice(0, PREVIEW_COUNT);
@@ -13,7 +13,7 @@ export default function Projects() {
       <h2 className="mt-2 text-2xl font-semibold tracking-tight">
         Projects
       </h2>
-      <div className="mt-10 grid gap-4 md:grid-cols-3">
+      <div className="mt-10 grid gap-4 md:grid-cols-2">
         {preview.map((project) => (
           <ProjectCard key={project.title} project={project} />
         ))}
