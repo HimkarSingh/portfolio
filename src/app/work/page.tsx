@@ -1,7 +1,7 @@
 import {Metadata} from "next";
 
 import Container from "@/components/common/Container";
-import ExperienceItem from "@/components/experience/ExperienceItem";
+import {WorkExperience} from "@/components/experience/ExperienceItem";
 import {experiences} from "@/config/experience";
 import {siteConfig} from "@/config/site";
 
@@ -20,10 +20,8 @@ export default function WorkPage() {
         Roles, research, and projects I&apos;ve worked on.
       </p>
 
-      <div className="mt-6 space-y-5">
-        {experiences.map((experience) => (
-          <ExperienceItem key={experience.role} experience={experience} />
-        ))}
+      <div className="mt-6">
+        <WorkExperience experiences={experiences} />
       </div>
     </Container>
   );

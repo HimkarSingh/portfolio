@@ -172,13 +172,29 @@ export const useThemeToggle = ({
     document.startViewTransition(switchTheme);
   }, [setTheme, variant, start, blur, gifUrl, updateStyles]);
 
+  // Plain, instant switch — no view-transition animation at all. This is
+  // what chanhdai.com's toggle actually does for every trigger (click and
+  // "d" key alike). We use it just for the keyboard shortcut, so pressing
+  // "d" feels snappy/utilitarian while the on-screen button keeps its
+  // animated reveal for a deliberate click.
+  const toggleThemeInstant = useCallback(() => {
+    const from = isDark ? "dark" : "light";
+    const to = isDark ? "light" : "dark";
+    trackEvent({
+      name: "theme_toggle",
+      data: {from, to, location: "keyboard"},
+    });
+    setTheme(isDark ? "light" : "dark");
+  }, [isDark, setTheme, trackEvent]);
+
   return {
     isDark,
     toggleTheme,
     setCrazyLightTheme,
     setCrazyDarkTheme,
+    toggleThemeInstant,
   };
-};;
+};;;
 
 // ///////////////////////////////////////////////////////////////////////////
 
@@ -195,7 +211,7 @@ export const ThemeToggleButton = ({
   blur?: boolean;
   gifUrl?: string;
 }) => {
-  const { isDark, toggleTheme } = useThemeToggle({
+  const { isDark, toggleTheme, toggleThemeInstant } = useThemeToggle({
     variant,
     start,
     blur,
@@ -207,7 +223,14 @@ export const ThemeToggleButton = ({
     playClick();
     toggleTheme();
   }, [playClick, toggleTheme]);
-  useHotkeys("d", handleToggle);
+
+  const handleInstantToggle = useCallback(() => {
+    playClick();
+    toggleThemeInstant();
+  }, [playClick, toggleThemeInstant]);
+
+  useHotkeys("d", handleInstantToggle);
+
 
   return (
     <Button
