@@ -20,7 +20,7 @@ export default function Contact() {
           rel="noreferrer"
           className="shrink-0 rounded-lg border border-zinc-700 px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
         >
-          Book a call
+          Let's Talk
         </a>
       </div>
     </section>

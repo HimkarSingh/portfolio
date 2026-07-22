@@ -7,5 +7,5 @@ export const socialLinks = {
 
   email: "mailto:himkarsingh@proton.me",
 
-  cal: "https://cal.com/himkar/30min",
+  cal: "https://cal.com/himkar/",
 } as const;
