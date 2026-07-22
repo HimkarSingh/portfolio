@@ -93,11 +93,29 @@ export default function ScrambledIP() {
       >
         {text}
       </TooltipTrigger>
-      <TooltipContent side="top">
+      <TooltipContent
+        side="bottom"
+        sideOffset={8}
+        className="w-fit min-w-44 border border-border/50 bg-card/95 backdrop-blur-md shadow-lg shadow-primary/5"
+      >
         {info && (
-          <div className="space-y-0.5">
-            <p>{info.region}, {info.country}</p>
-            <p className="text-[10px] opacity-70">{info.org}</p>
+          <div className="space-y-2 py-1">
+            <div className="flex items-center gap-1.5 border-b border-border/30 pb-1.5">
+              <span className="size-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]" />
+              <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground/60">
+                Live
+              </span>
+            </div>
+            <div className="space-y-1 font-mono text-xs">
+              <div className="flex items-baseline justify-between gap-4">
+                <span className="text-muted-foreground/60">Location</span>
+                <span className="text-foreground">{info.region}, {info.country}</span>
+              </div>
+              <div className="flex items-baseline justify-between gap-4">
+                <span className="text-muted-foreground/60">Provider</span>
+                <span className="text-foreground">{info.org}</span>
+              </div>
+            </div>
           </div>
         )}
       </TooltipContent>
