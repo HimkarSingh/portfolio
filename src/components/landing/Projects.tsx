@@ -13,7 +13,7 @@ export default function Projects() {
       <h2 className="mt-2 text-2xl font-semibold tracking-tight">
         Projects
       </h2>
-      <div className="mt-10 grid gap-4 md:grid-cols-2">
+      <div className="mt-4 grid gap-4 md:grid-cols-2">
         {preview.map((project) => (
           <ProjectCard key={project.title} project={project} />
         ))}

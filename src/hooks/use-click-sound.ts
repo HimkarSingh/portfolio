@@ -28,9 +28,9 @@ interface UseClickSoundOptions {
 }
 
 export function useClickSound({
-  frequency = 720,
+  frequency =900,
   duration = 0.045,
-  volume = 0.06,
+  volume = 0.16,
 }: UseClickSoundOptions = {}) {
   return useCallback(() => {
     const ctx = getAudioContext();
