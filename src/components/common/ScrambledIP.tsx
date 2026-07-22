@@ -1,27 +1,58 @@
 'use client';
 
 import {useState, useEffect, useRef} from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+  TooltipProvider,
+} from "@/components/ui/tooltip";
 
 const CHARS = "!<>-_\\/[]{}—=+*^?#________";
 
+interface IpInfo {
+  ip: string;
+  region: string;
+  country: string;
+  org: string;
+}
+
 export default function ScrambledIP() {
   const [text, setText] = useState("New Delhi, IN");
-  const [ip, setIp] = useState("");
+  const [info, setInfo] = useState<IpInfo | null>(null);
   const [isHovered, setIsHovered] = useState(false);
   const frameRef = useRef(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
 
   useEffect(() => {
-    fetch("https://api.ipify.org?format=json")
+    fetch("http://ip-api.com/json/")
       .then((res) => res.json())
-      .then((data) => setIp(data.ip))
-      .catch(() => setIp(""));
+      .then((data) => {
+        if (data.status === "success") {
+          const ip = data.query;
+          const isV6 = ip.includes(":");
+
+          if (isV6) {
+            fetch("https://api.ipify.org?format=json")
+              .then((r) => r.json())
+              .then((d) => {
+                setInfo({ip: `${ip} / ${d.ip}`, region: data.city, country: data.country, org: data.isp});
+              })
+              .catch(() => {
+                setInfo({ip, region: data.city, country: data.country, org: data.isp});
+              });
+          } else {
+            setInfo({ip, region: data.city, country: data.country, org: data.isp});
+          }
+        }
+      })
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
-    if (isHovered && ip) {
+    if (isHovered && info) {
       frameRef.current = 0;
-      const target = ip;
+      const target = info.ip;
       const maxFrames = 20;
 
       intervalRef.current = setInterval(() => {
@@ -50,15 +81,27 @@ export default function ScrambledIP() {
     } else {
       setText("New Delhi, IN");
     }
-  }, [isHovered, ip]);
+  }, [isHovered, info]);
 
   return (
-    <span
-      className="mt-1 inline-block cursor-default text-sm text-muted-foreground transition-colors hover:text-foreground"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      {text}
-    </span>
+    <TooltipProvider>
+    <Tooltip open={isHovered && !!info}>
+      <TooltipTrigger
+        className="mt-1 inline-block cursor-default text-sm text-muted-foreground transition-colors hover:text-foreground"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {text}
+      </TooltipTrigger>
+      <TooltipContent side="top">
+        {info && (
+          <div className="space-y-0.5">
+            <p>{info.region}, {info.country}</p>
+            <p className="text-[10px] opacity-70">{info.org}</p>
+          </div>
+        )}
+      </TooltipContent>
+    </Tooltip>
+    </TooltipProvider>
   );
 }
