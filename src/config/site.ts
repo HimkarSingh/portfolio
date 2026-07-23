@@ -12,7 +12,7 @@ export const siteConfig = {
     "Building secure applications, AI-powered security tools, and modern web experiences.",
 
   longDescription:
-    "I'm Himanshu Kaushik, Application Security Engineer, AI, and Full Stack Development. I enjoy building secure software, exploring modern technologies, and sharing my learning journey.",
+    "I’m an Application Security practitioner focused on offensive security, source code auditing, and vulnerability research. I specialize in identifying business logic flaws, dissecting web/API architectures, and building automated security tooling.",
 
   // Website
   url: "http://localhost:3000", // change after buying domain

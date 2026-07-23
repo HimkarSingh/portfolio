@@ -3,7 +3,6 @@ export type ExperiencePositionItemType = {
   title: string;
   employmentPeriod: {start: string; end?: string};
   employmentType?: string;
-  /** Not part of chanhdai's original model — added since it's useful info */
   location?: string;
   description?: string;
   skills?: string[];

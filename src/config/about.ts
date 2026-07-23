@@ -2,7 +2,7 @@ import { siteConfig } from "./site";
 
 export const about = {
   eyebrow: "About",
-  heading: "Building thoughtfully, securing by design.",
+  heading: "Himanshu Kaushik",
   description: siteConfig.longDescription,
   highlights: [
     "Application security",
