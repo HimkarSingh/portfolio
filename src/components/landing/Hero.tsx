@@ -5,6 +5,7 @@ import Github from "@/components/svgs/Github";
 import LinkedIn from "@/components/svgs/LinkedIn";
 import Mail from "@/components/svgs/Mail";
 import X from "@/components/svgs/X";
+import TryHackMe from "@/components/svgs/TryHackMe";
 import ScrambledIP from "@/components/common/ScrambledIP";
 
 export default function Hero() {
@@ -35,7 +36,7 @@ export default function Hero() {
         {siteConfig.description}
       </p>
 
-      <div className="mt-6 flex items-center gap-4">
+      <div className="mt-6 flex items-center gap-2">
         <a
           href={socialLinks.github}
           target="_blank"
@@ -67,6 +68,18 @@ export default function Hero() {
         >
           <span className="block h-full w-full [&>svg]:h-full [&>svg]:w-full">
             <X />
+          </span>
+        </a>
+
+        <a
+          href={socialLinks.tryhackme}
+          target="_blank"
+          rel="noreferrer"
+          aria-label="TryHackMe"
+          className="flex size-5 items-center justify-center overflow-hidden text-muted-foreground transition-colors hover:text-foreground"
+        >
+          <span className="block h-full w-full [&>svg]:h-full [&>svg]:w-full">
+            <TryHackMe />
           </span>
         </a>
 
